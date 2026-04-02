@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On The Ave — Rediscover Your Campus</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:#faf6ee;color:#333;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 48px;background:rgba(250,246,238,.92);backdrop-filter:blur(20px);border-bottom:2px solid rgba(141,179,74,.12)}
+.n-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.n-logo img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.n-logo span{font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:#2a2a2a}
+.n-links{display:flex;gap:28px;align-items:center}
+.n-links a{text-decoration:none;color:#777;font-weight:600;font-size:.88rem;cursor:pointer;padding-bottom:2px;border-bottom:2px solid transparent;transition:all .3s}
+.n-links a:hover,.n-links a.active{color:#6b8c3a;border-bottom-color:#6b8c3a}
+.n-btn{background:#2a2a2a;color:#fff!important;padding:10px 22px;border-radius:50px;font-weight:700;font-size:.82rem;cursor:pointer;border-bottom:none!important;transition:all .3s;text-decoration:none}
+.n-btn:hover{background:#6b8c3a;transform:scale(1.05)}
+.page{display:none}.page.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ballSpin{0%{transform:rotate(0) scale(1)}25%{transform:rotate(180deg) scale(1.1)}50%{transform:rotate(360deg) scale(.95)}75%{transform:rotate(540deg) scale(1.08)}100%{transform:rotate(720deg) scale(1)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 12px 40px rgba(0,0,0,.3),0 0 20px rgba(167,139,250,0)}50%{box-shadow:0 12px 40px rgba(0,0,0,.3),0 0 35px rgba(167,139,250,.5),0 0 70px rgba(167,139,250,.2)}}
+@keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1)}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0) rotate(0)}50%{opacity:1;transform:scale(1) rotate(180deg)}}
+@keyframes driftA{0%{transform:translateX(0)}50%{transform:translateX(15px)}100%{transform:translateX(0)}}
+@keyframes driftB{0%{transform:translateX(0)}50%{transform:translateX(-12px)}100%{transform:translateX(0)}}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+@keyframes autoScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ball-spinning{animation:ballSpin 1s ease-in-out!important}
+.eightball{width:200px;height:200px;border-radius:50%;margin:0 auto;cursor:pointer;background:radial-gradient(circle at 38% 32%,#555,#111 70%);animation:pulseGlow 3s ease-in-out infinite;display:flex;align-items:center;justify-content:center;transition:transform .3s}
+.eightball:hover{transform:scale(1.08)}
+.eightball-inner{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 45% 40%,#fff,#ddd 60%,#bbb);display:flex;align-items:center;justify-content:center}
+.eightball-inner span{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:#1a1a2e}
+.feat-card{border-radius:20px;padding:50px 40px;max-width:600px;margin:0 auto;position:relative;overflow:hidden;transition:all .5s}
+.feat-card::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border-radius:22px;z-index:-1;background:linear-gradient(135deg,#cf91a1,#a78bfa,#abdce2,#bac263,#cf91a1);background-size:300% 300%;animation:shimmer 4s ease infinite}
+.feat-card:hover{transform:translateY(-8px) rotate(-.5deg)}
+.star{position:absolute;width:3px;height:3px;background:#fff;border-radius:50%;pointer-events:none;display:none}
+.night-active .star{display:block;animation:twinkle 2s ease-in-out infinite}
+.bg-star{position:absolute;width:3px;height:3px;background:white;border-radius:50%;animation:twinkle 3s ease-in-out infinite;pointer-events:none}
+.bg-sparkle{position:absolute;width:6px;height:6px;pointer-events:none;animation:sparkle 2s ease-in-out infinite}
+.bg-sparkle::before,.bg-sparkle::after{content:'';position:absolute;background:rgba(255,255,255,.7);border-radius:2px}
+.bg-sparkle::before{width:6px;height:2px;top:2px;left:0}
+.bg-sparkle::after{width:2px;height:6px;top:0;left:2px}
+.store-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.store-btns a img{height:50px;border-radius:8px;transition:transform .3s}
+.store-btns a img:hover{transform:translateY(-3px)}
+.stat-card{background:rgba(255,255,255,.1);border-radius:16px;padding:28px 36px;min-width:140px;backdrop-filter:blur(10px);text-align:center;transition:all .4s}
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 0 25px rgba(186,194,99,.3)}
+.quote-card{background:rgba(255,255,255,.06);border-radius:20px;padding:28px 24px;text-align:left;border:1px solid rgba(255,255,255,.08);transition:all .4s}
+.quote-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.1);box-shadow:0 0 25px rgba(167,139,250,.3)}
+footer{padding:52px 48px 22px;background:#2a2a2a;color:rgba(255,255,255,.7)}
+.ft-top{display:flex;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:24px}
+.ft-brand .ft-logo{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ft-brand .ft-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.ft-brand .ft-logo span{font-family:'Fraunces',serif;font-weight:900;font-size:1.05rem;color:#fff}
+.ft-brand>p{max-width:280px;font-size:.85rem;line-height:1.6}
+.ft-links h4{color:#fff;font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;font-weight:700}
+.ft-links a{display:block;color:rgba(255,255,255,.6);text-decoration:none;margin-bottom:8px;font-size:.85rem;cursor:pointer}
+.ft-links a:hover{color:#8db34a}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:18px;text-align:center;font-size:.75rem}
+@media(max-width:768px){
+nav{padding:12px 20px}
+.n-links{display:none!important;position:absolute;top:100%;left:0;right:0;background:#faf6ee;flex-direction:column;padding:20px;gap:16px;border-bottom:2px solid rgba(0,0,0,.06)}
+.n-links.open{display:flex!important}
+#hamBtn{display:block!important}
+.hero-home{padding:100px 20px 150px!important}
+.hero-home h1{font-size:3rem!important}
+.feat-card{padding:35px 25px}
+.help-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="n-logo" onclick="showPage('home')">
+<img src="https://i.ibb.co/wF9mDynv/Complete-Logo-copy.png" alt="On The Ave">
+<span>On The Ave</span>
+</div>
+<div class="n-links" id="navLinks">
+<a onclick="showPage('home')" class="active" data-page="home">Home</a>
+<a onclick="showPage('features')" data-page="features">Features</a>
+<a onclick="showPage('about')" data-page="about">About</a>
+<a onclick="showPage('contact')" data-page="contact">Help</a>
+<a class="n-btn" onclick="showPage('join')">Join the Team</a>
+</div>
+<button onclick="document.getElementById('navLinks').classList.toggle('open')" style="display:none;background:none;border:none;font-size:1.5rem;cursor:pointer" id="hamBtn">☰</button>
+</nav>
+
+<!-- ==================== HOME ==================== -->
+<div class="page active" id="page-home">
+<section class="hero-home" style="min-height:100vh;padding:100px 48px 200px;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;text-align:center;background:url('https://i.ibb.co/q3xQyzZd/Untitled-8-copy-4.png') center/cover no-repeat;position:relative;overflow:hidden">
+<div style="position:relative;z-index:2">
+<img src="https://i.ibb.co/wF9mDynv/Complete-Logo-copy.png" alt="On The Ave" style="width:160px;height:160px;border-radius:50%;object-fit:cover;margin-bottom:30px">
+<div style="height:40px;position:relative;overflow:hidden;margin-bottom:20px">
+<div id="wordCycler" style="position:relative">
+<p class="cycle-word" style="font-family:'Fraunces',serif;font-size:1.4rem;color:rgba(255,255,255,.95);font-weight:700;letter-spacing:.5px;position:absolute;width:100%;opacity:0;transition:all .5s">Rediscover Your Food.</p>
+<p class="cycle-word" style="font-family:'Fraunces',serif;font-size:1.4rem;color:rgba(255,255,255,.95);font-weight:700;letter-spacing:.5px;position:absolute;width:100%;opacity:0;transition:all .5s">Rediscover Your Culture.</p>
+<p class="cycle-word" style="font-family:'Fraunces',serif;font-size:1.4rem;color:rgba(255,255,255,.95);font-weight:700;letter-spacing:.5px;position:absolute;width:100%;opacity:0;transition:all .5s">Rediscover Your Community.</p>
+<p class="cycle-word" style="font-family:'Fraunces',serif;font-size:1.4rem;color:rgba(255,255,255,.95);font-weight:700;letter-spacing:.5px;position:absolute;width:100%;opacity:0;transition:all .5s">Rediscover Your Campus.</p>
+</div>
+</div>
+<p style="font-size:1.1rem;color:rgba(255,255,255,.88);line-height:1.75;margin-bottom:36px;max-width:560px">On The Ave is an AI-powered app helping Syracuse University students discover affordable local food, hidden gems, and diverse cuisines — from Iraqi restaurants to Turkish bakeries and everything in between.</p>
+<div class="store-btns">
+<a href="https://apps.apple.com/us/app/on-the-ave/id6761030847" target="_blank"><img src="https://i.ibb.co/BH5X6n8n/Download-on-the-App-Store-Badge-US-UK-RGB-blk-092917.png" alt="App Store"></a>
+<a href="#"><img src="https://i.ibb.co/Fkp3RW67/Get-It-On-Google-Play-Badge-Web-color-English.png" alt="Google Play"></a>
+</div>
+</div>
+</section>
+</div>
+
+<!-- ==================== FEATURES ==================== -->
+<div class="page" id="page-features">
+<section id="featSection" style="padding:120px 48px 120px;background:#fff;text-align:center;min-height:100vh;transition:background .5s">
+<div style="position:relative;display:inline-block;margin-bottom:12px">
+<div id="titleClouds">
+<img src="https://i.ibb.co/xKds91HS/Untitled-8-copy-3.png" style="position:absolute;top:-25px;left:-60px;width:70px;opacity:.7;animation:driftA 6s ease-in-out infinite">
+<img src="https://i.ibb.co/xKds91HS/Untitled-8-copy-3.png" style="position:absolute;top:0;right:-50px;width:55px;opacity:.6;animation:driftB 8s ease-in-out infinite">
+<img src="https://i.ibb.co/xKds91HS/Untitled-8-copy-3.png" style="position:absolute;bottom:-15px;left:30px;width:45px;opacity:.5;animation:driftA 7s ease-in-out infinite 1s">
+<img src="https://i.ibb.co/xKds91HS/Untitled-8-copy-3.png" style="position:absolute;top:-20px;right:40px;width:40px;opacity:.45;animation:driftB 5s ease-in-out infinite .5s">
+</div>
+<div id="titleStars" style="display:none">
+<span class="star" style="top:-12px;left:-30px;display:block;animation:twinkle 2s ease-in-out infinite"></span>
+<span class="star" style="top:10px;right:-25px;display:block;animation:twinkle 2s ease-in-out infinite .4s"></span>
+<span class="star" style="bottom:-8px;left:30px;width:4px;height:4px;display:block;animation:twinkle 2s ease-in-out infinite .8s"></span>
+<span class="star" style="top:-8px;right:40px;display:block;animation:twinkle 2s ease-in-out infinite 1.2s"></span>
+</div>
+<h1 id="featTitle" style="font-family:'Fraunces',serif;font-size:3.2rem;font-weight:900;color:#abdce2;transition:color .5s;position:relative">Features</h1>
+</div>
+<p id="featSub" style="color:#777;font-size:1.1rem;max-width:500px;margin:0 auto 30px;line-height:1.7;transition:color .5s">Considering getting On The Ave? Here are a few more reasons to download the app.</p>
+<div id="divTop" style="width:80px;height:3px;background:#abdce2;margin:0 auto 60px;border-radius:10px;transition:background .5s"></div>
+
+<!-- 8-BALL -->
+<div class="feat-card" style="background:#cf91a1">
+<h2 style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;margin-bottom:8px;color:#fff">Can't Decide Where to Eat? 🎱</h2>
+<p style="color:rgba(255,255,255,.85);margin-bottom:30px;font-size:1rem">Click the 8-ball and let fate pick your next meal.</p>
+<div class="eightball" id="theBall">
+<div class="eightball-inner"><span id="ballNum">8</span></div>
+</div>
+<div id="ballOut" style="margin-top:24px;min-height:60px;opacity:0;transition:opacity .5s">
+<p id="ballName" style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:#fff"></p>
+<p id="ballInfo" style="font-size:.9rem;color:rgba(255,255,255,.75);margin-top:6px"></p>
+</div>
+<p id="ballHint" style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:14px">👆 Tap to shake!</p>
+</div>
+
+<div id="divMid" style="width:100%;height:3px;background:rgba(0,0,0,.1);margin:50px auto;border-radius:10px;transition:background .5s"></div>
+
+<!-- DAY/NIGHT -->
+<div id="dnCard" style="background:#abdce2;border-radius:20px;padding:50px 40px;max-width:600px;margin:0 auto;transition:background .5s;position:relative;overflow:hidden">
+<span class="star" style="top:15%;left:10%"></span>
+<span class="star" style="top:25%;right:15%;animation-delay:.5s"></span>
+<span class="star" style="top:8%;left:45%;animation-delay:1s"></span>
+<span class="star" style="top:60%;right:8%;animation-delay:1.5s"></span>
+<span class="star" style="top:75%;left:20%;animation-delay:.3s"></span>
+<span class="star" style="top:40%;left:5%;animation-delay:.8s"></span>
+<span class="star" style="top:85%;right:25%;animation-delay:.6s"></span>
+<span class="star" style="top:50%;left:85%;animation-delay:1.8s"></span>
+<span class="star" style="top:70%;right:40%;animation-delay:1.4s"></span>
+<span class="star" style="top:10%;right:10%;animation-delay:.9s;width:4px;height:4px"></span>
+<h2 id="dnTitle" style="font-family:'Fraunces',serif;font-size:2rem;font-weight:900;margin-bottom:12px;color:#fff">☀️ Day Mode</h2>
+<p id="dnDesc" style="color:rgba(255,255,255,.85);margin-bottom:24px;font-size:.95rem">Explore cafés, brunch spots, and study-friendly places during the day.</p>
+<div id="dnTags" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:0"></div>
+<table style="width:100%;margin-top:28px"><tr><td style="text-align:center;padding:0;border:none">
+<div id="toggleBtn" style="cursor:pointer;display:inline-block">
+<img id="toggleImg" src="https://i.ibb.co/SXsg5hw7/Untitled-8-copy.png" alt="Toggle" style="width:240px">
+</div>
+</td></tr></table>
+<p style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:14px">👆 Click to toggle!</p>
+</div>
+</section>
+</div>
+
+<!-- ==================== ABOUT ==================== -->
+<div class="page" id="page-about">
+<section style="padding:120px 48px 60px;background:linear-gradient(180deg,#5b3a6b 0%,#2a2050 50%,#1a1a2e 100%);text-align:center;min-height:100vh;overflow:hidden;position:relative">
+<div class="bg-star" style="top:5%;left:8%"></div>
+<div class="bg-star" style="top:12%;right:12%;width:4px;height:4px;animation-delay:.5s"></div>
+<div class="bg-star" style="top:20%;left:25%;animation-delay:1s"></div>
+<div class="bg-star" style="top:8%;left:55%;width:2px;height:2px;animation-delay:1.5s"></div>
+<div class="bg-star" style="top:15%;right:30%;animation-delay:2s"></div>
+<div class="bg-star" style="top:28%;left:80%;width:4px;height:4px;animation-delay:.3s"></div>
+<div class="bg-star" style="top:35%;left:10%;animation-delay:.8s"></div>
+<div class="bg-star" style="top:42%;right:8%;width:2px;height:2px;animation-delay:1.2s"></div>
+<div class="bg-star" style="top:50%;left:40%;animation-delay:1.8s"></div>
+<div class="bg-star" style="top:55%;right:22%;width:4px;height:4px;animation-delay:.6s"></div>
+<div class="bg-star" style="top:62%;left:70%;animation-delay:2.2s"></div>
+<div class="bg-star" style="top:68%;left:15%;width:2px;height:2px;animation-delay:1.4s"></div>
+<div class="bg-star" style="top:75%;right:40%;animation-delay:.9s"></div>
+<div class="bg-star" style="top:82%;left:50%;width:4px;height:4px;animation-delay:1.7s"></div>
+<div class="bg-star" style="top:88%;right:15%;animation-delay:.2s"></div>
+<div class="bg-star" style="top:92%;left:30%;animation-delay:2.5s"></div>
+<div class="bg-star" style="top:38%;left:92%;width:3px;height:3px;animation-delay:1.1s"></div>
+<div class="bg-star" style="top:45%;left:5%;animation-delay:2.1s"></div>
+<div class="bg-star" style="top:70%;right:5%;width:2px;height:2px;animation-delay:.4s"></div>
+<div class="bg-star" style="top:18%;left:42%;width:4px;height:4px;animation-delay:1.6s"></div>
+<div class="bg-sparkle" style="top:10%;left:20%;animation-duration:3s"></div>
+<div class="bg-sparkle" style="top:25%;right:18%;animation-delay:1s;animation-duration:2.5s"></div>
+<div class="bg-sparkle" style="top:40%;left:65%;animation-delay:2s;animation-duration:3.5s"></div>
+<div class="bg-sparkle" style="top:55%;left:8%;animation-delay:.5s;animation-duration:2.8s"></div>
+<div class="bg-sparkle" style="top:70%;right:35%;animation-delay:1.5s;animation-duration:3.2s"></div>
+<div class="bg-sparkle" style="top:85%;left:45%;animation-delay:2.5s;animation-duration:2.2s"></div>
+<div class="bg-sparkle" style="top:33%;right:5%;animation-delay:.8s;animation-duration:3.8s"></div>
+<div class="bg-sparkle" style="top:78%;left:78%;animation-delay:1.8s;animation-duration:2.6s"></div>
+
+<div style="position:relative;z-index:2">
+<img src="https://i.ibb.co/6cWqYm6M/night-disco-logo.png" alt="On The Ave" style="width:160px;height:160px;border-radius:50%;object-fit:cover;margin-bottom:40px">
+<h2 style="font-family:'Fraunces',serif;font-size:2.8rem;font-weight:900;color:#fff;margin-bottom:12px">Our Mission</h2>
+<p style="color:rgba(255,255,255,.75);font-size:1.1rem;max-width:520px;margin:0 auto 40px;line-height:1.7">Connecting Syracuse University to the food and culture that makes this city special.</p>
+
+<div style="max-width:640px;margin:0 auto 60px;text-align:left;background:rgba(255,255,255,.06);border-radius:20px;padding:40px 36px;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px)">
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:14px">When Syracuse students step onto campus, they often stick to the same familiar spots. But what about Iraqi cuisine? Turkish? Or just a spot with really affordable food that's off the beaten path?</p>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:14px">On The Ave was created by Syracuse students who wanted more — <span style="background:rgba(186,194,99,.3);padding:2px 6px;border-radius:4px">more flavor, more culture, more connection</span>. We built this app because we believe discovering local food should be a shared experience, not just a solo search.</p>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:14px">Many underrecognized local businesses in Syracuse — particularly <span style="background:rgba(167,139,250,.3);padding:2px 6px;border-radius:4px">immigrant-owned restaurants and shops</span> — are often overlooked despite offering some of the city's most unique, affordable, and meaningful cultural experiences.</p>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:14px">On The Ave isn't just a food guide — it's a <span style="background:rgba(171,220,226,.3);padding:2px 6px;border-radius:4px;color:white;font-weight:700">community</span>. Share reviews, post photos, see what your friends are eating, and explore together. The more students use it, the stronger our local food scene becomes.</p>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8">Our goal is twofold: <strong style="color:white">give small businesses the spotlight they deserve</strong>, and <strong style="color:white">bring students together through the food and culture that makes Syracuse special.</strong></p>
+</div>
+
+<div style="width:100%;height:2px;background:rgba(255,255,255,.15);margin:0 auto 60px;border-radius:10px"></div>
+<h3 style="font-family:'Fraunces',serif;font-size:2.2rem;font-weight:900;color:white;margin-bottom:40px">Built by Students, For Students</h3>
+
+<div id="statsCarousel" style="overflow:hidden;margin-bottom:60px;position:relative">
+<div id="statsTrack" style="display:flex;gap:20px;padding:10px 0;width:max-content;animation:autoScroll 15s linear infinite">
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="50" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#bac263">0+</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Local Spots</div></div>
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="50" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#abdce2">0+</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Students</div></div>
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="10" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#f8c77e">0+</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Cuisines</div></div>
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="20" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#cf91a1">0+</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Users</div></div>
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="5" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#a78bfa">0</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Levels</div></div>
+<div class="stat-card" style="min-width:200px;flex-shrink:0"><div class="count-up" data-target="10" style="font-family:'Fraunces',serif;font-size:2.4rem;font-weight:900;color:#bac263">0+</div><div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:4px">Reviews</div></div>
+</div>
+</div>
+
+<div style="width:100%;height:2px;background:rgba(255,255,255,.15);margin:0 auto 60px;border-radius:10px"></div>
+<h3 style="font-family:'Fraunces',serif;font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:30px">What Students Are Saying</h3>
+
+<div id="reviewCarousel" style="overflow:hidden;margin-bottom:60px;position:relative">
+<div id="reviewTrack" style="display:flex;gap:20px;padding:10px 0;width:max-content;animation:autoScroll 25s linear infinite">
+<div class="quote-card" style="min-width:300px;max-width:300px;flex-shrink:0"><p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:16px">"I found this amazing Iraqi restaurant on Marshall Street that I walked past for two years. On The Ave changed how I eat on campus."</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:#abdce2;display:flex;align-items:center;justify-content:center;font-size:.9rem">👩‍🎓</div><div><div style="color:#fff;font-weight:700;font-size:.85rem">Sarah M.</div><div style="color:rgba(255,255,255,.5);font-size:.75rem">Junior, Newhouse</div></div></div></div>
+<div class="quote-card" style="min-width:300px;max-width:300px;flex-shrink:0"><p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:16px">"The 8-ball feature is so fun. My roommates and I shake it every Friday to decide where to eat. It's become our thing."</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:#cf91a1;display:flex;align-items:center;justify-content:center;font-size:.9rem">👨‍🎓</div><div><div style="color:#fff;font-weight:700;font-size:.85rem">Marcus T.</div><div style="color:rgba(255,255,255,.5);font-size:.75rem">Sophomore, Falk</div></div></div></div>
+<div class="quote-card" style="min-width:300px;max-width:300px;flex-shrink:0"><p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:16px">"As an international student, I love that this app highlights diverse food. It makes Syracuse feel more like home."</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:#bac263;display:flex;align-items:center;justify-content:center;font-size:.9rem">👩‍🎓</div><div><div style="color:#fff;font-weight:700;font-size:.85rem">Amira K.</div><div style="color:rgba(255,255,255,.5);font-size:.75rem">Senior, iSchool</div></div></div></div>
+<div class="quote-card" style="min-width:300px;max-width:300px;flex-shrink:0"><p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:16px">"I used to only eat at the dining hall. Now I've tried Ethiopian, Turkish, and Nepali food — all within walking distance."</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:#f8c77e;display:flex;align-items:center;justify-content:center;font-size:.9rem">👨‍🎓</div><div><div style="color:#fff;font-weight:700;font-size:.85rem">Jordan L.</div><div style="color:rgba(255,255,255,.5);font-size:.75rem">Freshman, A&S</div></div></div></div>
+<div class="quote-card" style="min-width:300px;max-width:300px;flex-shrink:0"><p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.7;font-style:italic;margin-bottom:16px">"Posting food pics on On The Ave is way more fun than Yelp. It actually feels like a community of students who care about local food."</p><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:#a78bfa;display:flex;align-items:center;justify-content:center;font-size:.9rem">👩‍🎓</div><div><div style="color:#fff;font-weight:700;font-size:.85rem">Priya S.</div><div style="color:rgba(255,255,255,.5);font-size:.75rem">Junior, Whitman</div></div></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section style="padding:100px 48px;text-align:center;background:#cf91a1;color:#fff;position:relative;overflow:hidden">
+<img src="https://i.ibb.co/7J73ymj9/night-disco-logo.png" alt="" style="position:absolute;top:-20px;right:40px;width:220px;height:220px;opacity:.25;animation:spin 20s linear infinite;pointer-events:none">
+<h2 style="font-family:'Fraunces',serif;font-size:2.8rem;font-weight:900;margin-bottom:14px;position:relative">Download the App 🪩</h2>
+<p style="font-size:1.05rem;opacity:.88;margin-bottom:32px;position:relative;max-width:500px;margin-left:auto;margin-right:auto">Discover Syracuse's best hidden food gems. Available now on iOS and Android.</p>
+<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative">
+<a href="https://apps.apple.com/us/app/on-the-ave/id6761030847" target="_blank"><img src="https://i.ibb.co/BH5X6n8n/Download-on-the-App-Store-Badge-US-UK-RGB-blk-092917.png" alt="App Store" style="height:50px;border-radius:8px"></a>
+<a href="#"><img src="https://i.ibb.co/Fkp3RW67/Get-It-On-Google-Play-Badge-Web-color-English.png" alt="Google Play" style="height:50px;border-radius:8px"></a>
+</div>
+</section>
+</div>
+
+<!-- ==================== HELP ==================== -->
+<div class="page" id="page-contact">
+<section style="padding:120px 48px 100px;background:linear-gradient(180deg,#abdce2,#8ecad6);min-height:100vh;text-align:center;position:relative;overflow:hidden">
+<div class="bg-star" style="top:5%;left:10%;animation-delay:.3s"></div>
+<div class="bg-star" style="top:8%;right:8%;width:4px;height:4px;animation-delay:.7s"></div>
+<div class="bg-star" style="top:15%;left:25%;animation-delay:1.2s;width:2px;height:2px"></div>
+<div class="bg-star" style="top:22%;right:30%;animation-delay:1.8s"></div>
+<div class="bg-star" style="top:30%;left:5%;width:4px;height:4px;animation-delay:.5s"></div>
+<div class="bg-star" style="top:38%;right:15%;animation-delay:2.1s"></div>
+<div class="bg-star" style="top:45%;left:70%;animation-delay:.9s;width:3px;height:3px"></div>
+<div class="bg-star" style="top:52%;right:5%;animation-delay:1.5s"></div>
+<div class="bg-star" style="top:60%;left:40%;width:4px;height:4px;animation-delay:.2s"></div>
+<div class="bg-star" style="top:68%;right:25%;animation-delay:1.9s"></div>
+<div class="bg-star" style="top:75%;left:15%;animation-delay:.6s;width:2px;height:2px"></div>
+<div class="bg-star" style="top:82%;right:40%;width:4px;height:4px;animation-delay:2.3s"></div>
+<div class="bg-star" style="top:88%;left:55%;animation-delay:1.1s"></div>
+<div class="bg-star" style="top:92%;right:12%;animation-delay:.4s;width:3px;height:3px"></div>
+<div class="bg-star" style="top:12%;left:85%;animation-delay:1.7s"></div>
+<div class="bg-star" style="top:48%;left:88%;width:2px;height:2px;animation-delay:.8s"></div>
+<div class="bg-star" style="top:72%;right:8%;animation-delay:2s"></div>
+<div class="bg-sparkle" style="top:10%;left:18%;animation-delay:.5s;animation-duration:3s"></div>
+<div class="bg-sparkle" style="top:25%;right:20%;animation-delay:1.3s;animation-duration:2.8s"></div>
+<div class="bg-sparkle" style="top:40%;left:8%;animation-delay:2s;animation-duration:3.5s"></div>
+<div class="bg-sparkle" style="top:55%;right:10%;animation-delay:.7s;animation-duration:2.5s"></div>
+<div class="bg-sparkle" style="top:70%;left:30%;animation-delay:1.8s;animation-duration:3.2s"></div>
+<div class="bg-sparkle" style="top:85%;right:35%;animation-delay:1s;animation-duration:2.7s"></div>
+<div class="bg-sparkle" style="top:18%;left:50%;animation-delay:2.5s;animation-duration:3.8s"></div>
+<div class="bg-sparkle" style="top:62%;right:50%;animation-delay:.3s;animation-duration:2.9s"></div>
+
+<div style="position:relative;z-index:2">
+<img src="https://i.ibb.co/wF9mDynv/Complete-Logo-copy.png" alt="On The Ave" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:24px">
+<h2 style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:900;margin-bottom:12px;color:#fff">Help & Suggestions</h2>
+<p style="color:rgba(255,255,255,.85);margin-bottom:52px;max-width:480px;margin-left:auto;margin-right:auto">Have a question or know a great spot? We'd love to hear from you.</p>
+<div class="help-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:700px;margin:0 auto 50px">
+<div style="background:rgba(255,255,255,.25);border-radius:20px;padding:40px 28px;border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(12px);text-align:center;transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 50px rgba(0,0,0,.12)';this.style.background='rgba(255,255,255,.35)'" onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='none';this.style.background='rgba(255,255,255,.25)'">
+<div style="font-size:3rem;margin-bottom:16px">📍</div>
+<h3 style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:12px">Suggest a Spot</h3>
+<p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.6;margin-bottom:24px">Know an amazing local restaurant or hidden gem near campus? Tell us about it!</p>
+<a href="mailto:ontheaveapp@gmail.com?subject=Spot Suggestion" style="display:inline-block;background:#fff;color:#6ba8b5;padding:12px 28px;border-radius:50px;font-weight:700;font-size:.88rem;text-decoration:none;transition:all .3s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Submit a Spot →</a>
+</div>
+<div style="background:rgba(255,255,255,.25);border-radius:20px;padding:40px 28px;border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(12px);text-align:center;transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 50px rgba(0,0,0,.12)';this.style.background='rgba(255,255,255,.35)'" onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='none';this.style.background='rgba(255,255,255,.25)'">
+<div style="font-size:3rem;margin-bottom:16px">🛟</div>
+<h3 style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:12px">Need Support</h3>
+<p style="color:rgba(255,255,255,.85);font-size:.9rem;line-height:1.6;margin-bottom:24px">Having an issue with the app or have a question? We'll get back to you ASAP.</p>
+<a href="mailto:ontheaveapp@gmail.com?subject=Support Request" style="display:inline-block;background:#fff;color:#6ba8b5;padding:12px 28px;border-radius:50px;font-weight:700;font-size:.88rem;text-decoration:none;transition:all .3s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Get Help →</a>
+</div>
+</div>
+<div style="background:rgba(255,255,255,.15);border-radius:16px;padding:20px 32px;display:inline-block;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25)">
+<p style="color:#fff;font-size:.95rem;font-weight:600">📧 <a href="mailto:ontheaveapp@gmail.com" style="color:#fff;text-decoration:none">ontheaveapp@gmail.com</a></p>
+</div>
+</div>
+</section>
+</div>
+
+<!-- ==================== JOIN ==================== -->
+<div class="page" id="page-join">
+<section style="padding:120px 48px 100px;background:linear-gradient(180deg,#5b3a6b,#2a2050,#1a1a2e);min-height:100vh;text-align:center;position:relative;overflow:hidden">
+<div class="bg-star" style="top:3%;left:8%"></div>
+<div class="bg-star" style="top:6%;right:12%;width:4px;height:4px;animation-delay:.3s"></div>
+<div class="bg-star" style="top:10%;left:30%;animation-delay:.7s"></div>
+<div class="bg-star" style="top:14%;right:35%;width:2px;height:2px;animation-delay:1.1s"></div>
+<div class="bg-star" style="top:18%;left:55%;animation-delay:1.5s"></div>
+<div class="bg-star" style="top:22%;right:8%;width:4px;height:4px;animation-delay:.4s"></div>
+<div class="bg-star" style="top:28%;left:12%;animation-delay:1.8s"></div>
+<div class="bg-star" style="top:33%;right:20%;animation-delay:.6s;width:3px;height:3px"></div>
+<div class="bg-star" style="top:38%;left:75%;animation-delay:2.1s"></div>
+<div class="bg-star" style="top:44%;left:5%;width:4px;height:4px;animation-delay:.9s"></div>
+<div class="bg-star" style="top:50%;right:45%;animation-delay:1.3s"></div>
+<div class="bg-star" style="top:56%;left:40%;width:2px;height:2px;animation-delay:2.4s"></div>
+<div class="bg-star" style="top:62%;right:10%;animation-delay:.2s"></div>
+<div class="bg-star" style="top:68%;left:20%;width:4px;height:4px;animation-delay:1.6s"></div>
+<div class="bg-star" style="top:74%;right:30%;animation-delay:2s"></div>
+<div class="bg-star" style="top:80%;left:60%;animation-delay:.5s;width:3px;height:3px"></div>
+<div class="bg-star" style="top:86%;right:15%;animation-delay:1.2s"></div>
+<div class="bg-star" style="top:92%;left:35%;width:2px;height:2px;animation-delay:2.3s"></div>
+<div class="bg-sparkle" style="top:8%;left:22%;animation-duration:3s"></div>
+<div class="bg-sparkle" style="top:20%;right:15%;animation-delay:.8s;animation-duration:2.5s"></div>
+<div class="bg-sparkle" style="top:35%;left:70%;animation-delay:1.6s;animation-duration:3.5s"></div>
+<div class="bg-sparkle" style="top:48%;right:8%;animation-delay:.3s;animation-duration:2.8s"></div>
+<div class="bg-sparkle" style="top:60%;left:10%;animation-delay:2s;animation-duration:3.2s"></div>
+<div class="bg-sparkle" style="top:72%;right:38%;animation-delay:1.2s;animation-duration:2.2s"></div>
+<div class="bg-sparkle" style="top:85%;left:50%;animation-delay:2.5s;animation-duration:3.8s"></div>
+<div class="bg-sparkle" style="top:15%;left:48%;animation-delay:.5s;animation-duration:2.6s"></div>
+<div class="bg-sparkle" style="top:55%;right:22%;animation-delay:1.8s;animation-duration:3.1s"></div>
+<div class="bg-sparkle" style="top:90%;left:18%;animation-delay:.9s;animation-duration:2.9s"></div>
+<div style="position:relative;z-index:2">
+<h2 style="font-family:'Fraunces',serif;font-size:2.6rem;font-weight:900;margin-bottom:12px;color:#fff">Work With Us</h2>
+<p style="color:rgba(255,255,255,.75);margin-bottom:40px;max-width:480px;margin-left:auto;margin-right:auto">Join the team building Syracuse's favorite food discovery app.</p>
+<img src="https://i.ibb.co/6cWqYm6M/night-disco-logo.png" alt="On The Ave" style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:40px;animation:pulseGlow 3s ease-in-out infinite">
+<div style="max-width:600px;margin:0 auto 50px;background:rgba(255,255,255,.08);border-radius:20px;padding:40px 36px;border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px)">
+<h3 style="font-family:'Fraunces',serif;font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:16px">Let's Connect</h3>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:6px">We're a student team at Syracuse University.</p>
+<p style="color:rgba(255,255,255,.85);font-size:.95rem;line-height:1.8;margin-bottom:24px">We're looking for teammates with skills in:</p>
+<div style="display:flex;flex-direction:column;gap:16px;max-width:400px;margin:0 auto 30px;text-align:left">
+<div style="background:rgba(167,139,250,.15);border-radius:14px;padding:16px 20px;border:1px solid rgba(167,139,250,.2);transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateX(10px)';this.style.background='rgba(167,139,250,.25)';this.style.boxShadow='0 0 25px rgba(167,139,250,.25)'" onmouseout="this.style.transform='translateX(0)';this.style.background='rgba(167,139,250,.15)';this.style.boxShadow='none'"><div style="color:#fff;font-weight:700;font-size:.95rem">💻 Development</div><div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px">App coding & format</div></div>
+<div style="background:rgba(207,145,161,.15);border-radius:14px;padding:16px 20px;border:1px solid rgba(207,145,161,.2);transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateX(10px)';this.style.background='rgba(207,145,161,.25)';this.style.boxShadow='0 0 25px rgba(207,145,161,.25)'" onmouseout="this.style.transform='translateX(0)';this.style.background='rgba(207,145,161,.15)';this.style.boxShadow='none'"><div style="color:#fff;font-weight:700;font-size:.95rem">🎨 Graphic Design</div><div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px">Visual identity</div></div>
+<div style="background:rgba(171,220,226,.15);border-radius:14px;padding:16px 20px;border:1px solid rgba(171,220,226,.2);transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateX(10px)';this.style.background='rgba(171,220,226,.25)';this.style.boxShadow='0 0 25px rgba(171,220,226,.25)'" onmouseout="this.style.transform='translateX(0)';this.style.background='rgba(171,220,226,.15)';this.style.boxShadow='none'"><div style="color:#fff;font-weight:700;font-size:.95rem">🖥️ UI/UX</div><div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px">Usability & accessibility</div></div>
+<div style="background:rgba(186,194,99,.15);border-radius:14px;padding:16px 20px;border:1px solid rgba(186,194,99,.2);transition:all .4s;cursor:pointer" onmouseover="this.style.transform='translateX(10px)';this.style.background='rgba(186,194,99,.25)';this.style.boxShadow='0 0 25px rgba(186,194,99,.25)'" onmouseout="this.style.transform='translateX(0)';this.style.background='rgba(186,194,99,.15)';this.style.boxShadow='none'"><div style="color:#fff;font-weight:700;font-size:.95rem">✍️ Copywriting</div><div style="color:rgba(255,255,255,.6);font-size:.82rem;margin-top:4px">Content direction</div></div>
+</div>
+<a href="mailto:ontheaveapp@gmail.com?subject=Join the Team" style="display:inline-block;background:#fff;color:#5b3a6b;padding:14px 36px;border-radius:50px;font-weight:700;font-size:.95rem;text-decoration:none;transition:all .3s" onmouseover="this.style.transform='translateY(-3px) scale(1.05)';this.style.boxShadow='0 12px 35px rgba(255,255,255,.2)'" onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='none'">Apply Now →</a>
+<p style="color:rgba(255,255,255,.6);font-size:.88rem;margin-top:20px">📧 <a href="mailto:ontheaveapp@gmail.com" style="color:#fff;font-weight:700;text-decoration:none">ontheaveapp@gmail.com</a></p>
+</div>
+</div>
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+<div class="ft-top">
+<div class="ft-brand">
+<div class="ft-logo"><img src="https://i.ibb.co/wF9mDynv/Complete-Logo-copy.png" alt="On The Ave"><span>On The Ave</span></div>
+<p>An AI-driven app helping Syracuse students discover affordable local food, hidden gems, and diverse cuisines.</p>
+</div>
+<div class="ft-links">
+<h4>Pages</h4>
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('features')">Features</a>
+<a onclick="showPage('about')">About</a>
+<a onclick="showPage('contact')">Help</a>
+<a onclick="showPage('join')">Work With Us</a>
+</div>
+<div class="ft-links">
+<h4>Follow Us</h4>
+<a href="https://www.linkedin.com/company/on-the-avenue-app" target="_blank">LinkedIn</a>
+<a href="https://www.instagram.com/findmeontheave/" target="_blank">Instagram</a>
+</div>
+</div>
+<div class="ft-bottom">On The Ave 2026</div>
+</footer>
+
+<script>
+function showPage(name){
+var p=document.getElementsByClassName('page');
+for(var i=0;i<p.length;i++)p[i].classList.remove('active');
+document.getElementById('page-'+name).classList.add('active');
+var l=document.querySelectorAll('[data-page]');
+for(var j=0;j<l.length;j++){l[j].classList.remove('active');if(l[j].getAttribute('data-page')===name)l[j].classList.add('active');}
+window.scrollTo(0,0);
+var n=document.getElementById('navLinks');if(n)n.classList.remove('open');
+if(name==='about'){counted=false;var e=document.getElementsByClassName('count-up');for(var k=0;k<e.length;k++)e[k].textContent='0+';}
+}
+
+// WORD CYCLER
+var words=document.getElementsByClassName('cycle-word');
+var current=0;
+if(words.length>0)words[0].style.opacity='1';
+setInterval(function(){for(var i=0;i<words.length;i++){words[i].style.opacity='0';words[i].style.transform='translateY(-20px)';}current=(current+1)%words.length;setTimeout(function(){words[current].style.transform='translateY(0)';words[current].style.opacity='1';},300);},2500);
+
+// 8-BALL
+var ballBusy=false;
+var restaurants=[["King David's","Shawarma · Marshall St · $$"],["Cafe Kubal","Coffee · S Salina St · $"],["Aleppo Kitchen","Falafel wraps · North Side · $"],["Himalayan Flavors","Nepali momos · Erie Blvd · $$"],["Eva's European Sweets","Pastries · North Side · $"],["European Bakery","Turkish pide · N Salina · $"],["Toss n' Fire Pizza","Wood-fired · Westcott St · $$"],["Angotti's","Italian · N Salina · $$"],["Pastabilities","Pasta · S Clinton St · $$"],["Varsity Pizza","Late-night · S Crouse · $"]];
+document.addEventListener('click',function(e){var b=document.getElementById('theBall');if(!b||!b.contains(e.target)||ballBusy)return;ballBusy=true;document.getElementById('ballNum').textContent='?';document.getElementById('ballOut').style.opacity='0';document.getElementById('ballHint').style.opacity='0';b.classList.add('ball-spinning');setTimeout(function(){b.classList.remove('ball-spinning');document.getElementById('ballNum').textContent='8';var r=restaurants[Math.floor(Math.random()*restaurants.length)];document.getElementById('ballName').textContent='🎱 Go try '+r[0]+'!';document.getElementById('ballInfo').textContent=r[1];document.getElementById('ballOut').style.opacity='1';document.getElementById('ballHint').style.opacity='1';document.getElementById('ballHint').textContent='👆 Tap again!';ballBusy=false;},1000);});
+
+// DAY/NIGHT
+var dayTags='<span style="background:rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">☕ Coffee Shops</span><span style="background:rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🥐 Brunch</span><span style="background:rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">📚 Study Spots</span><span style="background:rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🥗 Healthy Eats</span><span style="background:rgba(255,255,255,.4);color:#fff;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🧁 Bakeries</span>';
+var nightTags='<span style="background:rgba(167,139,250,.3);color:#d4c8f0;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🪩 Clubs</span><span style="background:rgba(167,139,250,.3);color:#d4c8f0;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🍕 Late Night Eats</span><span style="background:rgba(167,139,250,.3);color:#d4c8f0;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🍸 Bars</span><span style="background:rgba(167,139,250,.3);color:#d4c8f0;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🌮 Food Trucks</span><span style="background:rgba(167,139,250,.3);color:#d4c8f0;padding:8px 18px;border-radius:50px;font-size:.82rem;font-weight:600">🎶 Live Music</span>';
+var isDay=true;
+document.getElementById('dnTags').innerHTML=dayTags;
+document.addEventListener('click',function(e){var btn=document.getElementById('toggleBtn');if(!btn||!btn.contains(e.target))return;isDay=!isDay;document.getElementById('featSection').style.background=isDay?'#fff':'#1a1a2e';document.getElementById('featTitle').style.color=isDay?'#abdce2':'#a78bfa';document.getElementById('featSub').style.color=isDay?'#777':'rgba(255,255,255,.7)';document.getElementById('divTop').style.background=isDay?'#abdce2':'#a78bfa';document.getElementById('divMid').style.background=isDay?'rgba(0,0,0,.1)':'rgba(255,255,255,.15)';document.getElementById('dnCard').style.background=isDay?'#abdce2':'#2a2050';document.getElementById('dnTitle').innerHTML=isDay?'☀️ Day Mode':'🌙 Night Mode';document.getElementById('dnDesc').textContent=isDay?'Explore cafés, brunch spots, and study-friendly places during the day.':'Discover the best late-night spots, clubs, and after-hours eats.';document.getElementById('dnTags').innerHTML=isDay?dayTags:nightTags;document.getElementById('toggleImg').src=isDay?'https://i.ibb.co/SXsg5hw7/Untitled-8-copy.png':'https://i.ibb.co/3mWMGzyR/Untitled-8-copy-13.png';document.getElementById('titleClouds').style.display=isDay?'block':'none';document.getElementById('titleStars').style.display=isDay?'none':'block';if(isDay){document.getElementById('dnCard').classList.remove('night-active');}else{document.getElementById('dnCard').classList.add('night-active');}});
+
+// CAROUSELS
+function setupLoop(id){var t=document.getElementById(id);if(!t)return;t.innerHTML=t.innerHTML+t.innerHTML;}
+setupLoop('statsTrack');setupLoop('reviewTrack');
+function setupPause(cId,tId){var c=document.getElementById(cId);var t=document.getElementById(tId);if(!c||!t)return;c.addEventListener('mouseenter',function(){t.style.animationPlayState='paused';});c.addEventListener('mouseleave',function(){t.style.animationPlayState='running';});}
+setupPause('statsCarousel','statsTrack');setupPause('reviewCarousel','reviewTrack');
+
+// COUNT UP
+var counted=false;
+function countUp(){if(counted)return;counted=true;var els=document.getElementsByClassName('count-up');for(var i=0;i<els.length;i++){(function(el){var target=parseInt(el.getAttribute('data-target'));var cur=0;var step=Math.ceil(target/60);var iv=setInterval(function(){cur+=step;if(cur>=target){cur=target;clearInterval(iv);}if(target===5){el.textContent=cur;}else{el.textContent=cur+'+';}},80);})(els[i]);}}
+var so=new IntersectionObserver(function(entries){for(var i=0;i<entries.length;i++){if(entries[i].isIntersecting)countUp();}},{threshold:.5});
+var ss=document.getElementById('statsCarousel');if(ss)so.observe(ss);
+</script>
+</body>
+</html>
